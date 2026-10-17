@@ -236,7 +236,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   .cheer{animation:none;opacity:0;}
 }
 </style>
-<script src="关卡配置.js"></script>
+<script src="config.js" onerror="window.__cfgLoadFail=true"></script>
 </head>
 <body>
 <div class="app">
@@ -290,7 +290,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 
     <!-- 未找到关卡配置文件时提示（含下载按钮） -->
     <div class="cfg-banner" id="cfgBanner" style="display:none">
-      <div class="cfg-banner-text">没有找到程序同目录的「关卡配置.js」，已自动使用内置默认关卡。点按钮下载一份配置文件，放到程序同目录后即可自由修改关卡。</div>
+      <div class="cfg-banner-text">没有找到（或读取失败）程序同目录的「config.js」，当前使用<b>内置默认关卡</b>（内容与 config.js 一致：指法小课堂 → 基本键左/右 → 上排左/右 → 混合 → 下排左/右 → 挑战 → 单词 → 短句 → 计时 → 自由，共 16 关）。点按钮下载一份配置文件，放到程序同目录后即可自由修改关卡。</div>
       <button type="button" class="cfg-banner-btn" id="cfgDownloadBtn">下载配置文件</button>
     </div>
 
@@ -424,22 +424,29 @@ var KB_ROWS = [
 var DEFAULT_WORDS = ["cat","dog","sun","hat","red","big","fun","run","pig","cup","ball","star","tree","bird","fish","book","milk","cake","play","jump","duck","frog","lion","bear","happy","hello"];
 
 /* 内置默认关卡（顺序即关卡号：levels 数组第 1 个就是第 1 关，不需要 id 字段；
-   中间插入新关卡时，直接按顺序插进数组即可，无需调整其他字段）
+   与 config.js 的内容保持一致，程序目录没有配置文件时也按这套关卡运行）
    color 可选：不写会自动随机配色 */
 var DEFAULT_LEVELS = [
   { name:"指法小课堂", kind:"lesson", chars:"fj", count:8, desc:"先认识基本键，学会放手指", badge:"入门", color:"#4D9DE0" },
-  { name:"基本键训练", kind:"letters", chars:HOME_KEYS, count:20, desc:"左手 ASDF · 右手 JKL;", badge:"基本键", color:"#43AA8B" },
-  { name:"上排键 · 左边", kind:"letters", chars:"qwert", count:20, desc:"QWERT 左手往上伸", badge:"上排键", color:"#FF9F1C" },
-  { name:"上排键 · 右边", kind:"letters", chars:"yuiop", count:20, desc:"YUIOP 右手往上伸", badge:"上排键", color:"#FF9F1C" },
-  { name:"下排键训练", kind:"letters", chars:"zxcvbnm", count:24, desc:"ZXCVBNM 往下伸手", badge:"下排键", color:"#EF6A5A" },
-  { name:"字母大挑战", kind:"letters", chars:ALPHA, count:30, desc:"26 个字母混着来", badge:"挑战", color:"#7B6CF0" },
-  { name:"单词练习", kind:"words", words:DEFAULT_WORDS, count:16, desc:"把一个个单词打出来", badge:"组合", color:"#F09B2E" },
-  { name:"短句练习", kind:"words", words:["i can run.","a red ball.","my cat is fat.","i like milk.","let us play.","the sun is hot.","a big bird.","look at the fish.","this is my dog."], count:8, desc:"连起来打一个小短句", badge:"组合", color:"#E8537A" },
-  { name:"计时挑战", kind:"timer", chars:ALPHA, time:60, desc:"60 秒，看你能打对多少个", badge:"计时", color:"#E85D3F" },
-  { name:"自由练习", kind:"letters", chars:ALPHA, count:40, desc:"想打什么就打什么", badge:"自由", color:"#4D9DE0", alwaysOpen:true }
+  { name:"基本键左手", kind:"letters", chars:"asdfg", count:20, desc:"左手 ASDFG", badge:"基本键" },
+  { name:"基本键右手", kind:"letters", chars:"hjkl;", count:20, desc:"右手 HJKL；", badge:"基本键" },
+  { name:"基本键训练", kind:"letters", chars:"asdfghjkl;", count:20, desc:"左手 ASDFG · 右手 HJKL;", badge:"基本键" },
+  { name:"上排键左手", kind:"letters", chars:"qwert", count:20, desc:"QWERT 左手往上伸", badge:"上排键" },
+  { name:"上排键右手", kind:"letters", chars:"yuiop", count:20, desc:"YUIOP 右手往上伸", badge:"上排键" },
+  { name:"上排键混合", kind:"letters", chars:"qwertyuiop", count:20, desc:"上排混合练习", badge:"上排键" },
+  { name:"上中排混合练习", kind:"letters", chars:"qwertyuiopasdfghjkl;", count:20, desc:"上排混合练习", badge:"上排键" },
+  { name:"下排键左手", kind:"letters", chars:"zxcvb", count:24, desc:"ZXCVB 左手往下伸手", badge:"下排键" },
+  { name:"下排键左手", kind:"letters", chars:"nm,./", count:24, desc:"NM,./ 右手往下伸手", badge:"下排键" },
+  { name:"下排键混合", kind:"letters", chars:"zxcvbnm,./", count:24, desc:"双手往下伸手", badge:"下排键" },
+  { name:"字母大挑战", kind:"letters", chars:ALPHA, count:30, desc:"26 个字母混着来", badge:"挑战" },
+  { name:"单词练习", kind:"words", count:16, desc:"把一个个单词打出来", badge:"组合" },
+  { name:"短句练习", kind:"words", words:["i can run.","a red ball.","my cat is fat.","i like milk.","let us play.","the sun is hot.","a big bird.","look at the fish.","this is my dog."], count:8, desc:"连起来打一个小短句", badge:"组合" },
+  { name:"计时挑战", kind:"timer", chars:ALPHA, time:60, desc:"60 秒，看你能打对多少个", badge:"计时" },
+  { name:"自由练习", kind:"letters", chars:ALPHA, count:40, desc:"想打什么就打什么", badge:"自由", alwaysOpen:true }
 ];
-/* 读取外部关卡配置（同目录"关卡配置.js"），文件缺失或加载失败时自动使用上面的默认配置 */
+/* 读取外部关卡配置（同目录"config.js"），文件缺失或加载失败时自动使用上面的默认配置 */
 var CFG = (typeof window !== "undefined" && window.KID_TYPING_CONFIG) ? window.KID_TYPING_CONFIG : null;
+var CFG_MISSING = !CFG || (typeof window !== "undefined" && window.__cfgLoadFail === true);
 var COLOR_POOL = ["#4D9DE0","#43AA8B","#FF9F1C","#EF6A5A","#7B6CF0","#F09B2E","#E8537A","#E85D3F"];
 /* 补全颜色：关卡没写 color 时随机从色板选一个 */
 function normalizeLevels(arr){
@@ -612,16 +619,23 @@ function updateSoundIcon(){
   $("soundOffIco").style.display = state.sound ? "none" : "";
 }
 
-/* 配置文件缺失时：显示横幅，并提供下载默认配置 */
+/* 配置文件缺失或加载失败时：显示横幅，并提供下载默认配置 */
 function updateCfgBanner(){
   var ok = !!(CFG && CFG.levels && CFG.levels.length);
   $("cfgBanner").style.display = ok ? "none" : "";
+}
+/* 检测到旧版格式（关卡带 id 字段）的 config.js 时给出提示 */
+function checkLegacyConfig(){
+  if(CFG && CFG.levels && CFG.levels.length &&
+     CFG.levels.some(function(l){ return l.id !== undefined; })){
+    showToast("config.js 是旧版格式（含 id 字段），已自动按关卡顺序加载，可下载最新版替换");
+  }
 }
 function downloadDefaultConfig(){
   var comment = [
     "/* ============================================",
     "   小小打字员 · 关卡配置文件",
-    "   把本文件放在「打字练习程序.html」的同目录即可生效。",
+    "   把本文件放在「HappyType.html」的同目录即可生效。",
     "",
     "   · levels 数组的顺序就是关卡顺序（第 1 个=第 1 关），不需要写 id 字段",
     "   · 想在中途加一关：按顺序把新关卡对象插进 levels 数组即可，",
@@ -649,7 +663,7 @@ function downloadDefaultConfig(){
   var blob = new Blob([text], { type: "text/javascript;charset=utf-8" });
   var a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "关卡配置.js";
+  a.download = "config.js";
   document.body.appendChild(a);
   a.click();
   setTimeout(function(){ URL.revokeObjectURL(a.href); if(a.parentNode){ a.parentNode.removeChild(a); } }, 200);
@@ -1132,6 +1146,7 @@ function initEvents(){
 loadProgress();
 initEvents();
 renderHome();
+checkLegacyConfig();
 </script>
 </body>
 </html>
