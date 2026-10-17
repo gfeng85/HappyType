@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>小小打字员 · 儿童打字练习</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='4' width='56' height='56' rx='16' fill='%23FF9F1C'/%3E%3Ctext x='32' y='45' font-size='36' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%23FFFFFF'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
+<style>
+/* ============ 基础 ============ */
+:root{
+  --bg:#FFF8EC;
+  --card:#FFFFFF;
+  --ink:#2F3E46;
+  --ink-soft:#7A8B99;
+  --orange:#FF9F1C;
+  --orange-deep:#F07F0E;
+  --blue:#4D9DE0;
+  --blue-deep:#2E7BC4;
+  --green:#43AA8B;
+  --green-deep:#2F8A6E;
+  --red:#EF6A5A;
+  --red-deep:#D9534A;
+  --key-shadow:#C9D4DE;
+  --left-tint:#EAF4FC;
+  --right-tint:#FFF0DC;
+  --radius-lg:24px;
+  --radius-md:16px;
+  --radius-sm:10px;
+  --font-round:'ZCOOL KuaiLe','Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif;
+  --font-body:'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif;
+  --font-letter:'Segoe UI',Arial,'Helvetica Neue','Noto Sans SC','Microsoft YaHei',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{font-size:16px;}
+body{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255,159,28,.12) 0, transparent 30%),
+    radial-gradient(circle at 88% 18%, rgba(77,157,224,.14) 0, transparent 32%),
+    radial-gradient(circle at 60% 96%, rgba(67,170,139,.10) 0, transparent 34%),
+    var(--bg);
+  min-height:100vh;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:6px;}
+
+.app{max-width:960px;margin:0 auto;padding:12px 14px 40px;}
+
+/* ============ 顶栏 ============ */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 2px 14px;}
+.brand{display:flex;align-items:center;gap:8px;}
+.brand-logo{width:38px;height:38px;flex:none;}
+.brand-name{font-family:var(--font-round);font-size:22px;font-weight:700;letter-spacing:1px;}
+.top-right{display:flex;align-items:center;gap:10px;}
+.star-total{display:flex;align-items:center;gap:5px;background:var(--card);border-radius:999px;padding:6px 14px;box-shadow:0 3px 0 rgba(201,212,222,.6);font-family:var(--font-round);font-size:17px;font-weight:700;}
+.star-total svg{width:20px;height:20px;}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:14px;background:var(--card);box-shadow:0 3px 0 rgba(201,212,222,.6);transition:transform .12s ease, box-shadow .12s ease;}
+.icon-btn:active{transform:translateY(2px);box-shadow:none;}
+.icon-btn.active{background:var(--orange);color:#fff;box-shadow:0 3px 0 var(--orange-deep);}
+.icon-btn svg{width:22px;height:22px;}
+
+/* ============ 视图切换 ============ */
+.view{display:none;animation:fadeIn .35s ease both;}
+.view.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+/* ============ 配置缺失横幅 ============ */
+.cfg-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:22px;padding:11px 16px;border-radius:var(--radius-md);background:#FFF7E8;border:2px dashed #F0B429;color:#7A5C12;font-size:14px;line-height:1.6;}
+.cfg-banner-text{flex:1;min-width:220px;}
+.cfg-banner-btn{border:none;background:#F0B429;color:#fff;font-weight:700;font-size:14px;padding:8px 18px;border-radius:999px;cursor:pointer;flex:none;}
+.cfg-banner-btn:hover{background:#E0A21C;}
+/* ============ 主页 hero ============ */
+.hero{background:var(--card);border-radius:var(--radius-lg);padding:26px 22px 22px;margin-bottom:22px;box-shadow:0 5px 0 rgba(201,212,222,.55);text-align:center;position:relative;overflow:hidden;}
+.hero-kb{position:relative;height:74px;margin-bottom:12px;}
+.hero-kb .kb-bar{position:absolute;left:50%;top:22px;transform:translateX(-50%);width:min(300px,70%);height:52px;background:var(--left-tint);border:2px solid var(--key-shadow);border-radius:14px;display:flex;gap:6px;padding:8px;}
+.hero-kb .kb-bar span{flex:1;background:#fff;border-radius:8px;box-shadow:0 2px 0 var(--key-shadow);}
+.hero-letter{position:absolute;font-family:var(--font-letter);font-weight:700;font-size:30px;color:var(--orange-deep);animation:jump 2.6s ease-in-out infinite;text-shadow:0 2px 0 rgba(240,127,14,.25);}
+.hero-letter.l2{left:26%;top:8px;animation-delay:.3s;color:var(--blue-deep);}
+.hero-letter.l3{left:40%;top:0;animation-delay:.7s;color:var(--green-deep);}
+.hero-letter.l4{left:54%;top:6px;animation-delay:1.1s;color:var(--red-deep);}
+.hero-letter.l5{left:66%;top:12px;animation-delay:.5s;color:var(--orange-deep);}
+.hero-letter.l6{left:78%;top:2px;animation-delay:1.5s;color:var(--blue-deep);}
+@keyframes jump{0%,100%{transform:translateY(0) scale(1);}25%{transform:translateY(-26px) scale(1.15);}55%{transform:translateY(0) scale(1);}70%{transform:translateY(-10px) scale(1.05);}85%{transform:translateY(0) scale(1);}}
+.hero h1{font-family:var(--font-round);font-size:clamp(28px,6vw,42px);letter-spacing:2px;margin-bottom:6px;color:var(--ink);}
+.hero .sub{font-size:15px;color:var(--ink-soft);line-height:1.7;margin-bottom:18px;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-round);font-weight:700;border-radius:999px;transition:transform .12s ease, box-shadow .12s ease;user-select:none;}
+.btn:active{transform:translateY(3px);box-shadow:none!important;}
+.btn-primary{background:var(--orange);color:#fff;box-shadow:0 4px 0 var(--orange-deep);font-size:18px;padding:14px 34px;}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 0 var(--blue-deep);font-size:17px;padding:12px 26px;}
+.btn-green{background:var(--green);color:#fff;box-shadow:0 4px 0 var(--green-deep);font-size:17px;padding:12px 26px;}
+.btn-ghost{background:var(--card);color:var(--blue-deep);box-shadow:0 4px 0 rgba(201,212,222,.75);font-size:16px;padding:11px 22px;border:2px solid var(--blue);}
+
+/* ============ 训练套餐 ============ */
+.section-title{display:flex;align-items:center;gap:10px;font-family:var(--font-round);font-size:21px;margin:0 0 14px 4px;}
+.section-title svg{width:24px;height:24px;color:var(--orange);}
+.level-grid{display:grid;grid-template-columns:1fr;gap:14px;}
+.level-card{position:relative;background:var(--card);border-radius:var(--radius-md);padding:16px 16px 14px;box-shadow:0 4px 0 rgba(201,212,222,.55);display:flex;flex-direction:column;gap:8px;text-align:left;transition:transform .12s ease;overflow:hidden;}
+.level-card:active{transform:translateY(3px);box-shadow:none;}
+.level-card .lc-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.level-badge{font-family:var(--font-round);font-size:14px;font-weight:700;color:#fff;padding:4px 12px;border-radius:999px;}
+.lc-name{font-family:var(--font-round);font-size:19px;font-weight:700;}
+.lc-desc{font-size:13px;color:var(--ink-soft);line-height:1.5;}
+.lc-meta{display:flex;align-items:center;gap:10px;margin-top:2px;}
+.lc-stars{display:flex;gap:3px;}
+.lc-stars svg{width:18px;height:18px;}
+.lc-go{margin-left:auto;font-family:var(--font-round);font-size:14px;color:var(--blue-deep);display:flex;align-items:center;gap:4px;}
+.level-card.locked .lock-cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:rgba(255,253,246,.94);}
+.level-card.locked .lock-cover svg{width:34px;height:34px;color:var(--ink-soft);}
+.level-card.locked .lock-cover span{font-size:13px;color:var(--ink-soft);font-weight:700;}
+.level-card:not(.locked){cursor:pointer;}
+
+/* ============ 指法课 ============ */
+.lesson-card{background:var(--card);border-radius:var(--radius-lg);padding:22px;box-shadow:0 5px 0 rgba(201,212,222,.55);}
+.lesson-card h2{font-family:var(--font-round);font-size:24px;margin-bottom:10px;}
+.lesson-card .lead{font-size:15px;color:var(--ink-soft);line-height:1.8;margin-bottom:16px;}
+.hands-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:10px 0 16px;}
+.hand-box{background:var(--left-tint);border-radius:var(--radius-md);padding:12px 14px;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:210px;}
+.hand-box.right{background:var(--right-tint);}
+.hand-box .hand-label{font-family:var(--font-round);font-size:15px;font-weight:700;}
+.hand-box svg{width:180px;height:140px;}
+.tip-list{display:grid;gap:10px;margin-bottom:18px;}
+.tip{display:flex;gap:10px;align-items:flex-start;background:#FFFDF7;border:2px dashed var(--key-shadow);border-radius:var(--radius-sm);padding:10px 12px;font-size:14px;line-height:1.6;}
+.tip svg{width:20px;height:20px;flex:none;margin-top:2px;color:var(--orange);}
+
+/* ============ 练习视图 ============ */
+.practice-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;}
+.practice-head h2{font-family:var(--font-round);font-size:19px;flex:none;}
+.progress-pill{flex:1;max-width:220px;display:flex;align-items:center;gap:8px;background:var(--card);border-radius:999px;padding:6px 14px;box-shadow:0 3px 0 rgba(201,212,222,.6);font-family:var(--font-round);font-size:15px;font-weight:700;}
+.progress-track{flex:1;height:10px;background:#E7EEF4;border-radius:999px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--green);border-radius:999px;transition:width .25s ease;}
+.timer-ring{width:34px;height:34px;flex:none;}
+.practice-card{background:var(--card);border-radius:var(--radius-lg);padding:22px 16px 18px;box-shadow:0 5px 0 rgba(201,212,222,.55);}
+.char-stage{min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;position:relative;}
+.big-char{font-family:var(--font-letter);font-size:clamp(88px,22vw,150px);font-weight:700;line-height:1.15;color:var(--ink);transition:color .12s ease, transform .12s ease;}
+.big-char.ok{color:var(--green-deep);transform:scale(.92);}
+.big-char.bad{color:var(--red-deep);animation:shake .3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-10px);}50%{transform:translateX(10px);}75%{transform:translateX(-6px);}}
+.word-row{font-family:var(--font-letter);font-size:clamp(44px,10vw,72px);font-weight:700;letter-spacing:2px;line-height:1.2;word-break:break-all;}
+.word-row .w-done{color:var(--green-deep);}
+.word-row .w-cur{color:var(--orange-deep);border-bottom:6px solid var(--orange);}
+.word-row .w-todo{color:#B9C6D1;}
+.stage-hint{font-size:14px;color:var(--ink-soft);min-height:20px;}
+/* 打字行：已打(左) + 当前(中，光标线) + 预告(右)，从左到右打字机效果 */
+.type-line{display:flex;align-items:baseline;justify-content:center;gap:clamp(4px,1.2vw,10px);font-family:var(--font-letter);min-height:128px;overflow:hidden;max-width:100%;flex-wrap:nowrap;}
+.tl-done{font-size:clamp(20px,4.5vw,30px);font-weight:700;color:var(--green-deep);opacity:.85;line-height:1;}
+.tl-done.tl-bad{color:var(--red-deep);}
+.tl-done.tl-old{opacity:.35;}
+.tl-now{font-size:clamp(72px,17vw,124px);font-weight:700;color:var(--ink);line-height:1;padding-bottom:6px;border-bottom:6px solid var(--orange);animation:tlIn .16s ease both;flex:none;}
+.tl-now.bad{color:var(--red-deep);animation:shake .3s ease;}
+.tl-next{font-size:clamp(18px,3.6vw,26px);font-weight:700;color:#B9C6D1;line-height:1;}
+.tl-next.n2{opacity:.65;}
+.tl-next.n3{opacity:.4;}
+@keyframes tlIn{from{transform:translateX(16px);opacity:0;}to{transform:none;opacity:1;}}
+.combo-chip{position:absolute;top:4px;right:6px;font-family:var(--font-round);font-size:16px;font-weight:700;color:var(--orange-deep);}
+.cheer{position:absolute;top:14px;left:50%;transform:translateX(-50%);font-family:var(--font-round);font-size:22px;font-weight:700;color:var(--green-deep);animation:cheerPop .9s ease both;pointer-events:none;}
+@keyframes cheerPop{0%{opacity:0;transform:translateX(-50%) scale(.4);}35%{opacity:1;transform:translateX(-50%) scale(1.25);}70%{opacity:1;transform:translateX(-50%) scale(1);}100%{opacity:0;transform:translateX(-50%) translateY(-26px) scale(.9);}}
+.finger-hint{display:flex;align-items:center;justify-content:center;gap:14px;margin:10px 0 4px;flex-wrap:wrap;}
+.finger-hint .fh-label{font-family:var(--font-round);font-size:16px;font-weight:700;color:var(--ink);min-width:120px;text-align:center;}
+.hand-mini{display:flex;align-items:center;gap:6px;background:#FFFDF7;border:2px solid var(--key-shadow);border-radius:12px;padding:8px 12px;}
+.hand-mini .hm-hand{display:flex;gap:5px;}
+.hm-finger{width:15px;height:34px;border-radius:8px;background:#DDE6EE;box-shadow:0 2px 0 rgba(160,178,193,.7);transition:all .12s ease;}
+.hm-finger.on{background:var(--orange);box-shadow:0 2px 0 var(--orange-deep);transform:scale(1.08);}
+.hm-thumb{width:15px;height:22px;border-radius:8px;background:#DDE6EE;box-shadow:0 2px 0 rgba(160,178,193,.7);align-self:flex-end;}
+.hm-thumb.on{background:var(--orange);box-shadow:0 2px 0 var(--orange-deep);}
+.keyboard{margin-top:12px;user-select:none;}
+.kb-row{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin-bottom:6px;}
+.key{position:relative;height:clamp(42px,9vw,52px);border-radius:9px;background:#fff;box-shadow:0 4px 0 var(--key-shadow);font-family:var(--font-letter);font-size:clamp(15px,4.5vw,22px);font-weight:700;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:background .1s ease, box-shadow .1s ease, transform .08s ease;}
+.key.left{background:var(--left-tint);}
+.key.right{background:var(--right-tint);}
+.key.pressed{transform:translateY(3px);box-shadow:0 1px 0 var(--key-shadow);}
+.key.target{background:#fff;box-shadow:0 4px 0 var(--orange-deep);outline:3px solid var(--orange);animation:targetPulse 1s ease-in-out infinite;z-index:2;}
+@keyframes targetPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+.key.ok{background:var(--green);color:#fff;box-shadow:0 4px 0 var(--green-deep);}
+.key.bad{background:var(--red);color:#fff;box-shadow:0 4px 0 var(--red-deep);animation:shake .3s ease;}
+.key .bump{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:#B9C6D1;}
+.kb-space{grid-column:1/-1;height:clamp(40px,7vw,44px);border-radius:9px;background:#fff;box-shadow:0 4px 0 var(--key-shadow);display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-size:12px;color:var(--ink-soft);font-weight:700;letter-spacing:1px;}
+.kb-space.target{outline:3px solid var(--orange);box-shadow:0 4px 0 var(--orange-deep);animation:targetPulse 1s ease-in-out infinite;}
+.kb-space.ok{background:var(--green);color:#fff;}
+.kb-space.bad{background:var(--red);color:#fff;animation:shake .3s ease;}
+
+/* 盲打模式：隐藏键盘与手指，显示实际输入的字符 */
+.blind-panel{min-height:200px;display:flex;align-items:center;justify-content:center;align-content:center;flex-wrap:wrap;gap:8px 10px;background:var(--left-tint);border-radius:var(--radius-md);margin-top:12px;padding:18px 14px;font-family:var(--font-letter);}
+.blind-panel span{font-size:clamp(26px,6vw,38px);font-weight:700;line-height:1.15;}
+.blind-panel .bp-ok{color:var(--green-deep);}
+.blind-panel .bp-bad{color:var(--red-deep);}
+.blind-panel .bp-cur{border-bottom:5px solid var(--orange);}
+.blind-panel .bp-tip{font-family:var(--font-body);font-size:15px;color:var(--ink-soft);}
+.stat-bar{display:flex;justify-content:center;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.stat-chip{display:flex;align-items:center;gap:7px;background:#FFFDF7;border:2px solid var(--key-shadow);border-radius:999px;padding:7px 14px;font-family:var(--font-round);font-size:15px;font-weight:700;}
+.stat-chip .dot{width:12px;height:12px;border-radius:50%;}
+.stat-chip .dot.g{background:var(--green);}
+.stat-chip .dot.r{background:var(--red);}
+.stat-chip .dot.o{background:var(--orange);}
+
+/* ============ 结果视图 ============ */
+.result-card{background:var(--card);border-radius:var(--radius-lg);padding:26px 20px 24px;box-shadow:0 5px 0 rgba(201,212,222,.55);text-align:center;}
+.result-stars{display:flex;justify-content:center;gap:14px;margin:14px 0 8px;}
+.result-stars svg{width:58px;height:58px;transition:transform .2s ease;}
+.result-stars .s-on{animation:starPop .55s cubic-bezier(.34,1.56,.64,1) both;}
+.result-stars .s-on:nth-child(1){animation-delay:.15s;}
+.result-stars .s-on:nth-child(2){animation-delay:.3s;}
+.result-stars .s-on:nth-child(3){animation-delay:.45s;}
+@keyframes starPop{from{transform:scale(0) rotate(-30deg);opacity:0;}to{transform:scale(1) rotate(0);opacity:1;}}
+.result-title{font-family:var(--font-round);font-size:clamp(26px,6vw,36px);color:var(--orange-deep);margin-bottom:4px;}
+.result-sub{font-size:15px;color:var(--ink-soft);margin-bottom:16px;}
+.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
+.result-item{background:#FFFDF7;border:2px solid var(--key-shadow);border-radius:var(--radius-md);padding:12px 10px;}
+.result-item .ri-num{font-family:var(--font-round);font-size:26px;font-weight:700;color:var(--ink);}
+.result-item .ri-num.ok{color:var(--green-deep);}
+.result-item .ri-num.bad{color:var(--red-deep);}
+.result-item .ri-label{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+.result-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+
+/* ============ 返回按钮行 ============ */
+.subbar{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.subbar .back{width:40px;height:40px;}
+.subbar h2{font-family:var(--font-round);font-size:20px;}
+
+/* ============ toast ============ */
+.toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(90px);background:var(--ink);color:#fff;font-family:var(--font-round);font-size:16px;padding:12px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(47,62,70,.3);transition:transform .3s ease;z-index:50;pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ============ 响应式 ============ */
+@media (min-width:560px){
+  .level-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media (min-width:900px){
+  .level-grid{grid-template-columns:repeat(4,1fr);}
+  .kb-row{gap:8px;}
+}
+@media (prefers-reduced-motion:reduce){
+  .hero-letter,.key.target,.kb-space.target{animation:none;}
+  .result-stars .s-on{animation:none;}
+  .cheer{animation:none;opacity:0;}
+}
+</style>
+<script src="关卡配置.js"></script>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== 顶栏 ===== -->
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-logo" viewBox="0 0 48 48" aria-hidden="true">
+        <rect x="4" y="10" width="40" height="28" rx="7" fill="#FF9F1C"/>
+        <rect x="9" y="15" width="5.5" height="5.5" rx="1.5" fill="#FFFDF7"/>
+        <rect x="17" y="15" width="5.5" height="5.5" rx="1.5" fill="#FFFDF7"/>
+        <rect x="25" y="15" width="5.5" height="5.5" rx="1.5" fill="#FFFDF7"/>
+        <rect x="33" y="15" width="5.5" height="5.5" rx="1.5" fill="#FFFDF7"/>
+        <rect x="13" y="24" width="5.5" height="5.5" rx="1.5" fill="#FFFDF7"/>
+        <rect x="21" y="24" width="5.5" height="5.5" rx="1.5" fill="#FFFDF7"/>
+        <rect x="29" y="24" width="5.5" height="5.5" rx="1.5" fill="#FFFDF7"/>
+      </svg>
+      <span class="brand-name">小小打字员</span>
+    </div>
+    <div class="top-right">
+      <button class="icon-btn" id="soundBtn" aria-label="声音开关" title="声音开关">
+        <svg id="soundOnIco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.4 5.6a9 9 0 0 1 0 12.8"/></svg>
+        <svg id="soundOffIco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/></svg>
+      </button>
+      <button class="icon-btn" id="blindBtn" aria-label="隐藏键盘开关" title="隐藏键盘和手指，练习时只看自己输入的字">
+        <svg id="blindOffIco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        <svg id="blindOnIco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><path d="m3 3 18 18"/></svg>
+      </button>
+      <div class="star-total">
+        <svg viewBox="0 0 24 24" fill="#FF9F1C" aria-hidden="true"><path d="M12 2.5 15 8.9l6.9.6-5.3 4.5 1.6 6.7L12 17.4 5.8 20.7l1.6-6.7L2.1 9.5 9 9.5 12 2.5z"/></svg>
+        <span id="totalStars">0</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== 视图：主页 ===== -->
+  <main id="view-home" class="view active">
+    <section class="hero">
+      <div class="hero-kb" aria-hidden="true">
+        <span class="hero-letter l2">A</span>
+        <span class="hero-letter l3">S</span>
+        <span class="hero-letter l4">D</span>
+        <span class="hero-letter l5">F</span>
+        <span class="hero-letter l6">J</span>
+        <div class="kb-bar"><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <h1>小小打字员，出发啦！</h1>
+      <p class="sub">屏幕显示什么字母，你就用正确的手指把它按出来。<br>从基本键开始，一步一步成为打字小高手。</p>
+      <button class="btn btn-primary" id="goLessonBtn">先学指法</button>
+    </section>
+
+    <!-- 未找到关卡配置文件时提示（含下载按钮） -->
+    <div class="cfg-banner" id="cfgBanner" style="display:none">
+      <div class="cfg-banner-text">没有找到程序同目录的「关卡配置.js」，已自动使用内置默认关卡。点按钮下载一份配置文件，放到程序同目录后即可自由修改关卡。</div>
+      <button type="button" class="cfg-banner-btn" id="cfgDownloadBtn">下载配置文件</button>
+    </div>
+
+    <h2 class="section-title">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm1 4v4h4V7H6zm8 0v4h4V7h-4zM6 13v4h4v-4H6zm8 0v4h4v-4h-4z"/></svg>
+      训练套餐
+    </h2>
+    <div class="level-grid" id="levelGrid"></div>
+  </main>
+
+  <!-- ===== 视图：指法课 ===== -->
+  <main id="view-lesson" class="view">
+    <div class="subbar">
+      <button class="icon-btn back" id="lessonBack" aria-label="返回主页">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <h2>指法小课堂</h2>
+    </div>
+    <div class="lesson-card">
+      <h2>两只小手，八个手指</h2>
+      <p class="lead">大拇指管空格，其他手指各管自己的键。先把左手食指放在 <b>F</b>，右手食指放在 <b>J</b>（这两个键上有一个小凸点，摸一摸就能找到），其他手指依次排开。</p>
+      <div class="hands-row">
+        <div class="hand-box">
+          <span class="hand-label">左手</span>
+          <svg viewBox="0 0 200 150" aria-hidden="true">
+            <rect x="26" y="96" width="148" height="44" rx="22" fill="#FFE3B3" stroke="#E8B87B"/>
+            <rect x="6" y="104" width="30" height="34" rx="13" transform="rotate(-22 21 121)" fill="#FFE3B3" stroke="#E8B87B"/>
+            <rect class="finger" x="34" y="30" width="24" height="74" rx="12" fill="#FFD9A0" stroke="#E8B87B"/>
+            <rect class="finger" x="64" y="22" width="24" height="82" rx="12" fill="#FFD9A0" stroke="#E8B87B"/>
+            <rect class="finger" x="94" y="16" width="24" height="88" rx="12" fill="#FFD9A0" stroke="#E8B87B"/>
+            <rect class="finger" x="124" y="24" width="24" height="80" rx="12" fill="#FFD9A0" stroke="#E8B87B"/>
+          </svg>
+          <span class="hand-label" style="font-size:12px;color:var(--ink-soft)">小指 · 无名指 · 中指 · 食指</span>
+        </div>
+        <div class="hand-box right">
+          <span class="hand-label">右手</span>
+          <svg viewBox="0 0 200 150" aria-hidden="true">
+            <rect x="26" y="96" width="148" height="44" rx="22" fill="#FFE8CC" stroke="#E8B87B"/>
+            <rect x="164" y="104" width="30" height="34" rx="13" transform="rotate(22 179 121)" fill="#FFE8CC" stroke="#E8B87B"/>
+            <rect class="finger" x="34" y="24" width="24" height="80" rx="12" fill="#FFE3B3" stroke="#E8B87B"/>
+            <rect class="finger" x="64" y="16" width="24" height="88" rx="12" fill="#FFE3B3" stroke="#E8B87B"/>
+            <rect class="finger" x="94" y="22" width="24" height="82" rx="12" fill="#FFE3B3" stroke="#E8B87B"/>
+            <rect class="finger" x="124" y="30" width="24" height="74" rx="12" fill="#FFE3B3" stroke="#E8B87B"/>
+          </svg>
+          <span class="hand-label" style="font-size:12px;color:var(--ink-soft)">食指 · 中指 · 无名指 · 小指</span>
+        </div>
+      </div>
+      <div class="tip-list">
+        <div class="tip">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 2.4 1.2 4.5 3 5.8V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.2c1.8-1.3 3-3.4 3-5.8a7 7 0 0 0-7-7zm-1 19h2v1h-2v-1z"/></svg>
+          <span><b>放正姿势：</b>坐直，手肘自然弯曲，手腕轻轻抬起，不要压在键盘上。</span>
+        </div>
+        <div class="tip">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2 9.6 8.6 2.5 9l5.4 4.6-1.6 6.9L12 17.2l5.7 3.3-1.6-6.9L21.5 9l-7.1-.4L12 2z"/></svg>
+          <span><b>记住分工：</b>左手管 <b>QWERT · ASDF · ZXCVB</b>，右手管 <b>YUIOP · JKL; · NM,./</b>，中间两个手指负责中间。</span>
+        </div>
+        <div class="tip">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm1-15h-2v6l4.2 2.5 1-1.7-3.2-1.9V7z"/></svg>
+          <span><b>打完回位：</b>每打完一个键，手指都要回到基本键上（左手 ASDF，右手 JKL;）。</span>
+        </div>
+      </div>
+      <div style="text-align:center">
+        <button class="btn btn-green" id="lessonStartBtn">我会啦，开始练！</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== 视图：练习 ===== -->
+  <main id="view-practice" class="view">
+    <div class="practice-head">
+      <button class="icon-btn back" id="practiceBack" aria-label="退出练习">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <h2 id="practiceTitle"></h2>
+      <div class="progress-pill">
+        <span id="pCount">0 / 0</span>
+        <div class="progress-track"><div class="progress-fill" id="pFill"></div></div>
+      </div>
+      <svg class="timer-ring" id="timerRing" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="16" fill="none" stroke="#E7EEF4" stroke-width="5"/>
+        <circle id="timerArc" cx="20" cy="20" r="16" fill="none" stroke="#4D9DE0" stroke-width="5" stroke-linecap="round" stroke-dasharray="100.53" stroke-dashoffset="0" transform="rotate(-90 20 20)"/>
+      </svg>
+    </div>
+    <div class="practice-card">
+      <div class="char-stage" id="charStage"></div>
+      <div class="finger-hint" id="fingerHint"></div>
+      <div class="blind-panel" id="blindPanel" style="display:none" aria-live="polite"></div>
+      <div class="keyboard" id="keyboard" aria-hidden="true"></div>
+      <div class="stat-bar" id="statBar"></div>
+    </div>
+  </main>
+
+  <!-- ===== 视图：结果 ===== -->
+  <main id="view-result" class="view">
+    <div class="result-card">
+      <div class="result-stars" id="resultStars"></div>
+      <div class="result-title" id="resultTitle"></div>
+      <div class="result-sub" id="resultSub"></div>
+      <div class="result-grid" id="resultGrid"></div>
+      <div class="result-actions" id="resultActions"></div>
+    </div>
+  </main>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* =====================================================
+   常量与数据
+===================================================== */
+var STORE_KEY = "typing-kids-progress-v1";
+var ALPHA = "abcdefghijklmnopqrstuvwxyz";
+var HOME_KEYS = "asdfjkl;";
+
+/* 字符 -> [手(L/R/T), 手指(1食指 2中指 3无名指 4小指 0拇指)] */
+var FINGER = {
+  q:["L",4], w:["L",3], e:["L",2], r:["L",1], t:["L",1],
+  a:["L",4], s:["L",3], d:["L",2], f:["L",1], g:["L",1],
+  z:["L",4], x:["L",3], c:["L",2], v:["L",1], b:["L",1],
+  y:["R",1], u:["R",1], i:["R",2], o:["R",3], p:["R",4],
+  h:["R",1], j:["R",1], k:["R",2], l:["R",3], ";":["R",4],
+  n:["R",1], m:["R",1], ",":["R",2], ".":["R",3], " ":["T",0]
+};
+/* 键盘显示顺序（10 列三排 + 空格） */
+var KB_ROWS = [
+  ["q","w","e","r","t","y","u","i","o","p"],
+  ["a","s","d","f","g","h","j","k","l",";"],
+  ["z","x","c","v","b","n","m",",",".","/"]
+];
+var DEFAULT_WORDS = ["cat","dog","sun","hat","red","big","fun","run","pig","cup","ball","star","tree","bird","fish","book","milk","cake","play","jump","duck","frog","lion","bear","happy","hello"];
+
+/* 内置默认关卡（顺序即关卡号：levels 数组第 1 个就是第 1 关，不需要 id 字段；
+   中间插入新关卡时，直接按顺序插进数组即可，无需调整其他字段）
+   color 可选：不写会自动随机配色 */
+var DEFAULT_LEVELS = [
+  { name:"指法小课堂", kind:"lesson", chars:"fj", count:8, desc:"先认识基本键，学会放手指", badge:"入门", color:"#4D9DE0" },
+  { name:"基本键训练", kind:"letters", chars:HOME_KEYS, count:20, desc:"左手 ASDF · 右手 JKL;", badge:"基本键", color:"#43AA8B" },
+  { name:"上排键 · 左边", kind:"letters", chars:"qwert", count:20, desc:"QWERT 左手往上伸", badge:"上排键", color:"#FF9F1C" },
+  { name:"上排键 · 右边", kind:"letters", chars:"yuiop", count:20, desc:"YUIOP 右手往上伸", badge:"上排键", color:"#FF9F1C" },
+  { name:"下排键训练", kind:"letters", chars:"zxcvbnm", count:24, desc:"ZXCVBNM 往下伸手", badge:"下排键", color:"#EF6A5A" },
+  { name:"字母大挑战", kind:"letters", chars:ALPHA, count:30, desc:"26 个字母混着来", badge:"挑战", color:"#7B6CF0" },
+  { name:"单词练习", kind:"words", words:DEFAULT_WORDS, count:16, desc:"把一个个单词打出来", badge:"组合", color:"#F09B2E" },
+  { name:"短句练习", kind:"words", words:["i can run.","a red ball.","my cat is fat.","i like milk.","let us play.","the sun is hot.","a big bird.","look at the fish.","this is my dog."], count:8, desc:"连起来打一个小短句", badge:"组合", color:"#E8537A" },
+  { name:"计时挑战", kind:"timer", chars:ALPHA, time:60, desc:"60 秒，看你能打对多少个", badge:"计时", color:"#E85D3F" },
+  { name:"自由练习", kind:"letters", chars:ALPHA, count:40, desc:"想打什么就打什么", badge:"自由", color:"#4D9DE0", alwaysOpen:true }
+];
+/* 读取外部关卡配置（同目录"关卡配置.js"），文件缺失或加载失败时自动使用上面的默认配置 */
+var CFG = (typeof window !== "undefined" && window.KID_TYPING_CONFIG) ? window.KID_TYPING_CONFIG : null;
+var COLOR_POOL = ["#4D9DE0","#43AA8B","#FF9F1C","#EF6A5A","#7B6CF0","#F09B2E","#E8537A","#E85D3F"];
+/* 补全颜色：关卡没写 color 时随机从色板选一个 */
+function normalizeLevels(arr){
+  arr.forEach(function(lv){ if(!lv.color){ lv.color = pick(COLOR_POOL); } });
+  return arr;
+}
+var LEVELS = normalizeLevels((CFG && CFG.levels && CFG.levels.length) ? CFG.levels : DEFAULT_LEVELS);
+var WORDS = (CFG && CFG.words && CFG.words.length) ? CFG.words : DEFAULT_WORDS;
+
+var CHEERS = ["真棒！","好厉害！","太棒了！","继续加油！","漂亮！","你真行！","哇，又对了！"];
+
+/* =====================================================
+   音效（Web Audio 合成，无需音频文件）
+===================================================== */
+var AC = null;
+function ensureAudio(){
+  if(!AC){ try{ AC = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){} }
+  if(AC && AC.state === "suspended"){ AC.resume(); }
+}
+function beep(freq, dur, type, delay, vol){
+  if(!state.sound || !AC) return;
+  var t = AC.currentTime + (delay || 0);
+  var o = AC.createOscillator();
+  var g = AC.createGain();
+  o.type = type || "sine";
+  o.frequency.value = freq;
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(vol || 0.14, t + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(AC.destination);
+  o.start(t); o.stop(t + dur + 0.03);
+}
+function sCorrect(){ beep(660,0.09,"sine",0,0.13); beep(880,0.12,"sine",0.06,0.11); }
+function sWrong(){ beep(196,0.18,"triangle",0,0.12); }
+function sClick(){ beep(520,0.06,"sine",0,0.07); }
+function sDone(){ [523,659,784,1047].forEach(function(f,i){ beep(f,0.18,"sine",i*0.12,0.13); }); }
+
+/* =====================================================
+   工具函数
+===================================================== */
+function $(id){ return document.getElementById(id); }
+function randInt(n){ return Math.floor(Math.random()*n); }
+function pick(arr){ return arr[randInt(arr.length)]; }
+function shuffle(arr){
+  var a = arr.slice(), i = a.length;
+  while(i > 0){
+    var j = randInt(i); i--;
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+/* 生成字母序列：避免连续重复 */
+function letterSeq(chars, count){
+  var pool = chars.split("");
+  var seq = [], last = "";
+  while(seq.length < count){
+    var c = pick(pool);
+    if(c === last && pool.length > 1){ continue; }
+    seq.push(c); last = c;
+  }
+  return seq;
+}
+/* 生成单词序列：避免相邻重复 */
+function wordSeq(words, count){
+  var seq = [], last = "";
+  while(seq.length < count){
+    var w = pick(words);
+    if(w === last && words.length > 1){ continue; }
+    seq.push(w); last = w;
+  }
+  return seq;
+}
+
+/* =====================================================
+   全局状态与进度
+===================================================== */
+var state = {
+  view: "home",
+  levelId: null,
+  seq: [],            // 字母序列：["a","b",...]；单词序列：[{word:"cat", idx:0}, ...]
+  isWords: false,
+  pos: 0,
+  wordPos: 0,
+  correct: 0,
+  wrong: 0,
+  combo: 0,
+  maxCombo: 0,
+  startTime: 0,
+  timerLeft: 0,
+  timerId: null,
+  done: false,
+  stars: {},          // 关卡索引 -> 星级
+  unlocked: [0],      // 已解锁的关卡索引列表（0 起，levels 数组下标）
+  best: {},           // 关卡索引 -> {acc, wpm, stars}
+  totalStars: 0,
+  sound: true,
+  blind: false,
+  inputLog: [],
+  badFlash: false,
+  toastTimer: null
+};
+
+/* 旧版进度（v1，关卡带 id 1-10）迁移为新版（v2，关卡按数组索引 0-9） */
+function migrateProgress(p){
+  if(!p || p.v === 2) return;
+  var s = {}, b = {};
+  if(p.stars){ for(var k in p.stars){ s[Math.max(0, (+k) - 1)] = p.stars[k]; } }
+  if(p.best){ for(var k2 in p.best){ b[Math.max(0, (+k2) - 1)] = p.best[k2]; } }
+  if(p.unlocked){ p.unlocked = p.unlocked.map(function(id){ return Math.max(0, id - 1); }); }
+  p.stars = s; p.best = b; p.v = 2;
+}
+function loadProgress(){
+  try{
+    var raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return;
+    var p = JSON.parse(raw);
+    migrateProgress(p);
+    if(p && p.stars){ state.stars = p.stars; }
+    if(p && p.unlocked && p.unlocked.length){ state.unlocked = p.unlocked; }
+    if(p && p.best){ state.best = p.best; }
+    if(typeof p.totalStars === "number"){ state.totalStars = p.totalStars; }
+    if(typeof p.sound === "boolean"){ state.sound = p.sound; }
+    if(typeof p.blind === "boolean"){ state.blind = p.blind; }
+  }catch(e){ /* 存储损坏时忽略 */ }
+}
+function saveProgress(){
+  try{
+    localStorage.setItem(STORE_KEY, JSON.stringify({
+      v: 2,
+      stars: state.stars,
+      unlocked: state.unlocked,
+      best: state.best,
+      totalStars: state.totalStars,
+      sound: state.sound,
+      blind: state.blind
+    }));
+  }catch(e){}
+}
+function getLevel(idx){
+  return (idx >= 0 && idx < LEVELS.length) ? LEVELS[idx] : null;
+}
+function isUnlocked(idx){
+  var lv = getLevel(idx);
+  if(lv && lv.alwaysOpen) return true;
+  return state.unlocked.indexOf(idx) >= 0;
+}
+function showToast(msg){
+  var t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(state.toastTimer);
+  state.toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 2200);
+}
+
+/* =====================================================
+   视图：渲染
+===================================================== */
+function starSVG(fill){
+  return '<svg viewBox="0 0 24 24" fill="'+fill+'" aria-hidden="true"><path d="M12 2.5 15 8.9l6.9.6-5.3 4.5 1.6 6.7L12 17.4 5.8 20.7l1.6-6.7L2.1 9.5 9 9.5 12 2.5z"/></svg>';
+}
+function lockSVG(){
+  return '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9z"/></svg>';
+}
+function chevronSVG(){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="m9 18 6-6-6-6"/></svg>';
+}
+
+function updateSoundIcon(){
+  $("soundOnIco").style.display = state.sound ? "" : "none";
+  $("soundOffIco").style.display = state.sound ? "none" : "";
+}
+
+/* 配置文件缺失时：显示横幅，并提供下载默认配置 */
+function updateCfgBanner(){
+  var ok = !!(CFG && CFG.levels && CFG.levels.length);
+  $("cfgBanner").style.display = ok ? "none" : "";
+}
+function downloadDefaultConfig(){
+  var comment = [
+    "/* ============================================",
+    "   小小打字员 · 关卡配置文件",
+    "   把本文件放在「打字练习程序.html」的同目录即可生效。",
+    "",
+    "   · levels 数组的顺序就是关卡顺序（第 1 个=第 1 关），不需要写 id 字段",
+    "   · 想在中途加一关：按顺序把新关卡对象插进 levels 数组即可，",
+    "     无需调整其他字段；但已存的星级进度会按新位置顺移",
+    "     （如原第 5 关的星星会归到插入后的第 6 关），",
+    "     需要重置进度可在浏览器控制台执行：",
+    "     localStorage.removeItem('typing-kids-progress-v1')",
+    "   · color 可选：不写会自动随机配色",
+    "",
+    "   字段说明：",
+    "     name        关卡名称（显示在卡片上）",
+    "     kind        lesson=指法课堂 / letters=字母练习 / words=单词短句 / timer=限时挑战",
+    "     chars       本关练习的字符（lesson / letters 用）",
+    "     count       本关要打多少个（lesson / letters / words 用）",
+    "     words       单词或短句列表（kind=words 用）",
+    "     time        限时秒数（kind=timer 用）",
+    "     desc        卡片上的说明文字",
+    "     badge       卡片左上角标签",
+    "     color       卡片颜色（可选，不写自动随机）",
+    "     alwaysOpen  true=此关不锁定，无需通关也能进入",
+    "   ============================================ */",
+    ""
+  ].join("\n");
+  var text = comment + "window.KID_TYPING_CONFIG = " + JSON.stringify({ levels: DEFAULT_LEVELS, words: DEFAULT_WORDS }, null, 2) + ";\n";
+  var blob = new Blob([text], { type: "text/javascript;charset=utf-8" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "关卡配置.js";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); if(a.parentNode){ a.parentNode.removeChild(a); } }, 200);
+}
+
+function switchView(name){
+  document.querySelectorAll(".view").forEach(function(v){ v.classList.remove("active"); });
+  $("view-" + name).classList.add("active");
+  state.view = name;
+  window.scrollTo(0, 0);
+}
+
+/* ---------- 主页 ---------- */
+function renderHome(){
+  var g = $("levelGrid");
+  g.innerHTML = "";
+  LEVELS.forEach(function(lv, idx){
+    var unlocked = isUnlocked(idx);
+    var stars = state.stars[idx] || 0;
+    var card = document.createElement("button");
+    card.type = "button";
+    card.className = "level-card" + (unlocked ? "" : " locked");
+    if(unlocked){
+      card.addEventListener("click", function(){ goLevel(idx); });
+    }else{
+      card.addEventListener("click", function(){ ensureAudio(); sClick(); showToast("先完成上一关，就能解锁啦！"); });
+    }
+    var starHtml = "";
+    for(var i=0;i<3;i++){
+      starHtml += starSVG(i < stars ? "#FF9F1C" : "#DDE6EE");
+    }
+    var lockCover = unlocked ? "" :
+      '<div class="lock-cover">' + lockSVG() + "<span>先完成上一关</span></div>";
+    card.innerHTML =
+      '<div class="lc-top">' +
+        '<span class="level-badge" style="background:' + lv.color + '">' + lv.badge + "</span>" +
+        '<span class="lc-stars">' + starHtml + "</span>" +
+      "</div>" +
+      '<div class="lc-name">' + lv.name + "</div>" +
+      '<div class="lc-desc">' + lv.desc + "</div>" +
+      '<div class="lc-meta">' + (unlocked ? '<span class="lc-go">开始练习' + chevronSVG() + "</span>" : "") + "</div>" +
+      lockCover;
+    g.appendChild(card);
+  });
+  $("totalStars").textContent = state.totalStars;
+  updateSoundIcon();
+  updateBlindBtn();
+  updateCfgBanner();
+  /* 错误抖动：重绘完成后给当前字符加抖动 */
+  if(state.badFlash){
+    state.badFlash = false;
+    var bc = $("bigChar");
+    if(bc){ bc.classList.add("bad"); setTimeout(function(){ bc.classList.remove("bad"); }, 320); }
+  }
+}
+
+/* ---------- 键盘 ---------- */
+var RIGHT_KEYS = ["y","u","i","o","p","h","j","k","l",";","n","m",",",".","/"];
+function buildKeyboard(){
+  var kb = $("keyboard");
+  var html = "";
+  KB_ROWS.forEach(function(row){
+    html += '<div class="kb-row">';
+    row.forEach(function(k){
+      var side = RIGHT_KEYS.indexOf(k) >= 0 ? "right" : "left";
+      var bump = (k === "f" || k === "j") ? '<span class="bump"></span>' : "";
+      html += '<button type="button" class="key ' + side + '" data-k="' + k + '" aria-label="键 ' + k + '">' + k + bump + "</button>";
+    });
+    html += "</div>";
+  });
+  html += '<div class="kb-space" data-k=" ">空格 SPACE</div>';
+  kb.innerHTML = html;
+  kb.addEventListener("pointerdown", function(e){
+    var t = e.target.closest(".key, .kb-space");
+    if(t && t.getAttribute("data-k") && state.view === "practice" && !state.done){
+      e.preventDefault();
+      ensureAudio();
+      handleInput(t.getAttribute("data-k").toLowerCase());
+    }
+  });
+}
+function highlightKeyboard(target){
+  var keys = document.querySelectorAll("#keyboard .key, #keyboard .kb-space");
+  var el = null;
+  keys.forEach(function(k){
+    k.classList.remove("target");
+    if(k.getAttribute("data-k") === target){ el = k; }
+  });
+  if(el){ el.classList.add("target"); }
+}
+
+/* ---------- 手指提示 ---------- */
+var FINGER_NAMES = ["","食指","中指","无名指","小指"];
+function renderFingerHint(ch){
+  var fh = $("fingerHint");
+  var fm = FINGER[ch];
+  if(!fm){ fh.innerHTML = '<div class="fh-label">按屏幕显示的键</div>'; return; }
+  var hand = fm[0], finger = fm[1];
+  var leftOn = (hand === "L") ? finger : 0;
+  var rightOn = (hand === "R") ? finger : 0;
+  var thumbOn = (hand === "T") ? 1 : 0;
+  function fingers(on, right){
+    var h = "";
+    /* 左右手俯视顺序：左手小指在最左、拇指在最右；右手拇指在最左、小指在最右 */
+    if(right){ h += '<div class="hm-thumb' + (thumbOn ? " on" : "") + '"></div>'; }
+    var order = right ? [1,2,3,4] : [4,3,2,1];
+    order.forEach(function(f){
+      h += '<div class="hm-finger' + (on === f ? " on" : "") + '"></div>';
+    });
+    if(!right){ h += '<div class="hm-thumb' + (thumbOn ? " on" : "") + '"></div>'; }
+    return h;
+  }
+  var label = "";
+  if(hand === "T"){ label = "用大拇指按空格"; }
+  else{ label = (hand === "L" ? "左手" : "右手") + FINGER_NAMES[finger]; }
+  fh.innerHTML =
+    '<div class="hand-mini"><div class="hm-hand">' + fingers(leftOn, false) + "</div></div>" +
+    '<div class="fh-label">' + label + "</div>" +
+    '<div class="hand-mini right"><div class="hm-hand">' + fingers(rightOn, true) + "</div></div>";
+}
+
+/* ---------- 盲打模式 ---------- */
+function renderBlindPanel(){
+  var panel = $("blindPanel");
+  var log = state.inputLog;
+  var recent = log.slice(-20);
+  var html = "";
+  recent.forEach(function(item, i){
+    var ch = item.ch === " " ? "·" : item.ch;
+    var cls = item.ok ? "bp-ok" : "bp-bad";
+    var latest = (i === recent.length - 1) ? " bp-cur" : "";
+    html += '<span class="' + cls + latest + '">' + ch + "</span>";
+  });
+  if(!recent.length){
+    html = '<span class="bp-tip">开始打字，这里会显示你按下的键</span>';
+  }
+  panel.innerHTML = html;
+}
+function updateBlindBtn(){
+  $("blindBtn").classList.toggle("active", state.blind);
+  $("blindOffIco").style.display = state.blind ? "none" : "";
+  $("blindOnIco").style.display = state.blind ? "" : "none";
+}
+
+/* ---------- 练习 ---------- */
+function renderPractice(){
+  var lv = getLevel(state.levelId);
+  $("practiceTitle").textContent = lv.name;
+  if(!document.querySelector("#keyboard .key")){ buildKeyboard(); }
+  renderStatBar();
+  updatePracticeUI();
+}
+function renderStatBar(){
+  $("statBar").innerHTML =
+    '<div class="stat-chip"><span class="dot g"></span>对了 <b id="sCorrect">0</b></div>' +
+    '<div class="stat-chip"><span class="dot r"></span>错了 <b id="sWrong">0</b></div>' +
+    '<div class="stat-chip"><span class="dot o"></span>连击 <b id="sCombo">0</b></div>';
+}
+/* 打字行（单字母/计时模式）：已打 + 当前 + 预告 */
+function typeLineHTML(){
+  var html = '<div class="type-line">';
+  /* 已打出的字符（最近 6 个，打字机留在左边） */
+  var done = state.inputLog.slice(-6);
+  done.forEach(function(item, i){
+    var ch = item.ch === " " ? "·" : item.ch;
+    var cls = item.ok ? "tl-done" : "tl-done tl-bad";
+    if(done.length > 4 && i < done.length - 4){ cls += " tl-old"; }
+    html += '<span class="' + cls + '">' + ch + "</span>";
+  });
+  /* 当前要打的字符 */
+  html += '<span class="tl-now" id="bigChar">' + state.seq[state.pos] + "</span>";
+  /* 预告：右侧接下来 3 个 */
+  for(var i=1;i<=3;i++){
+    var ch = state.seq[state.pos + i];
+    if(ch === undefined) break;
+    html += '<span class="tl-next n' + i + '">' + ch + "</span>";
+  }
+  html += "</div>";
+  return html;
+}
+function updatePracticeUI(){
+  var lv = getLevel(state.levelId);
+  var stage = $("charStage");
+  var total = state.seq.length;
+  var target;
+  if(lv.kind === "timer"){
+    target = state.seq[state.pos];
+    $("pCount").textContent = state.timerLeft + " 秒";
+    stage.innerHTML = typeLineHTML();
+  }else if(state.isWords){
+    var cur = state.seq[state.pos];
+    target = cur.word.charAt(state.wordPos);
+    $("pCount").textContent = (state.pos + 1) + " / " + total;
+    /* 渲染单词串 */
+    var html = '<div class="word-row">';
+    for(var i=0;i<cur.word.length;i++){
+      var c = cur.word.charAt(i);
+      var cls = i < state.wordPos ? "w-done" : (i === state.wordPos ? "w-cur" : "w-todo");
+      html += '<span class="' + cls + '">' + (c === " " ? "&nbsp;" : c) + "</span>";
+    }
+    html += "</div>";
+    stage.innerHTML = html;
+  }else{
+    target = state.seq[state.pos];
+    $("pCount").textContent = state.pos + " / " + total;
+    stage.innerHTML = typeLineHTML();
+  }
+  var fl;
+  if(lv.kind === "timer"){ fl = state.timerLeft / lv.time * 100; }
+  else{ fl = (state.seq.length - state.pos) / state.seq.length * 100; }
+  $("pFill").style.width = Math.max(0, Math.min(100, fl)) + "%";
+  if(state.blind){
+    $("fingerHint").style.display = "none";
+    $("keyboard").style.display = "none";
+    $("blindPanel").style.display = "";
+    renderBlindPanel();
+  }else{
+    $("fingerHint").style.display = "";
+    $("keyboard").style.display = "";
+    $("blindPanel").style.display = "none";
+    renderFingerHint(target);
+    highlightKeyboard(target);
+  }
+  updateBlindBtn();
+  $("sCorrect").textContent = state.correct;
+  $("sWrong").textContent = state.wrong;
+  $("sCombo").textContent = state.combo;
+  if(lv.kind === "timer"){
+    var t = state.timerLeft;
+    $("timerRing").style.display = "";
+    $("timerArc").style.strokeDashoffset = (100.53 * (1 - t / lv.time)).toFixed(1);
+  }else{
+    $("timerRing").style.display = "none";
+  }
+}
+
+/* ---------- 结果 ---------- */
+function resultStarsSVG(stars){
+  var html = "";
+  for(var i=0;i<3;i++){
+    var on = i < stars;
+    html += '<svg class="' + (on ? "s-on" : "") + '" viewBox="0 0 24 24" fill="' + (on ? "#FF9F1C" : "#DDE6EE") + '" aria-hidden="true"><path d="M12 2.5 15 8.9l6.9.6-5.3 4.5 1.6 6.7L12 17.4 5.8 20.7l1.6-6.7L2.1 9.5 9 9.5 12 2.5z"/></svg>';
+  }
+  return html;
+}
+function renderResult(res){
+  $("resultStars").innerHTML = resultStarsSVG(res.stars);
+  var title, sub;
+  if(res.stars >= 3){ title = "太棒了，打字小高手！"; }
+  else if(res.stars === 2){ title = "很棒，继续加油！"; }
+  else { title = "完成啦，多练练会更厉害！"; }
+  sub = res.levelName + " · 正确率 " + res.acc + "%";
+  $("resultTitle").textContent = title;
+  $("resultSub").textContent = sub;
+  $("resultGrid").innerHTML =
+    '<div class="result-item"><div class="ri-num ok">' + res.acc + '%</div><div class="ri-label">正确率</div></div>' +
+    '<div class="result-item"><div class="ri-num">' + res.wpm + '</div><div class="ri-label">每分钟（个）</div></div>' +
+    '<div class="result-item"><div class="ri-num ok">' + res.correct + '</div><div class="ri-label">打对</div></div>' +
+    '<div class="result-item"><div class="ri-num bad">' + res.wrong + '</div><div class="ri-label">打错</div></div>';
+  var actions = "";
+  actions += '<button class="btn btn-primary" id="retryBtn">再来一次</button>';
+  if(res.nextUnlocked){
+    actions += '<button class="btn btn-blue" id="nextBtn">下一关</button>';
+  }
+  actions += '<button class="btn btn-ghost" id="homeBtn">回到主页</button>';
+  $("resultActions").innerHTML = actions;
+  $("retryBtn").addEventListener("click", function(){ goLevel(state.levelId); });
+  if(res.nextUnlocked){ $("nextBtn").addEventListener("click", function(){ goLevel(res.nextUnlocked); }); }
+  $("homeBtn").addEventListener("click", function(){ switchView("home"); renderHome(); });
+  if(state.sound){ sDone(); }
+}
+
+/* =====================================================
+   交互：练习流程
+===================================================== */
+function goLevel(idx){
+  ensureAudio(); sClick();
+  var lv = getLevel(idx);
+  if(!lv) return;
+  state.levelId = idx;
+  startPractice(lv);
+}
+function startPractice(lv){
+  clearInterval(state.timerId);
+  state.done = false;
+  state.pos = 0;
+  state.wordPos = 0;
+  state.correct = 0;
+  state.wrong = 0;
+  state.combo = 0;
+  state.maxCombo = 0;
+  state.inputLog = [];
+  state.startTime = Date.now();
+  if(lv.kind === "timer"){
+    state.isWords = false;
+    state.seq = letterSeq(lv.chars, 2000);
+    state.timerLeft = lv.time;
+  }else if(lv.kind === "words"){
+    state.isWords = true;
+    var wlist = lv.words || WORDS;
+    state.seq = wordSeq(wlist, lv.count).map(function(w){ return {word: w, idx: 0}; });
+  }else{
+    state.isWords = false;
+    state.seq = letterSeq(lv.chars, lv.count);
+  }
+  switchView("practice");
+  renderPractice();
+  if(lv.kind === "timer"){
+    state.timerId = setInterval(function(){
+      state.timerLeft--;
+      if(state.timerLeft <= 0){
+        clearInterval(state.timerId);
+        finishPractice();
+      }else{
+        updatePracticeUI();
+      }
+    }, 1000);
+  }
+}
+
+function findKey(k){
+  var keys = document.querySelectorAll("#keyboard .key, #keyboard .kb-space");
+  for(var i=0;i<keys.length;i++){
+    if(keys[i].getAttribute("data-k") === k){ return keys[i]; }
+  }
+  return null;
+}
+function markBad(k){
+  var el = findKey(k);
+  if(el){
+    el.classList.add("bad");
+    setTimeout(function(){ el.classList.remove("bad"); }, 300);
+  }
+}
+function flashOk(k){
+  var el = findKey(k);
+  if(el){
+    el.classList.add("ok");
+    setTimeout(function(){ el.classList.remove("ok"); }, 260);
+  }
+}
+function cheer(){
+  var stage = $("charStage");
+  var el = document.createElement("div");
+  el.className = "cheer";
+  el.textContent = pick(CHEERS);
+  stage.appendChild(el);
+  setTimeout(function(){ if(el.parentNode){ el.parentNode.removeChild(el); } }, 950);
+}
+
+function handleInput(k){
+  if(state.view !== "practice" || state.done) return;
+  var lv = getLevel(state.levelId);
+  var target;
+  if(state.isWords){
+    var cur = state.seq[state.pos];
+    target = cur.word.charAt(state.wordPos);
+  }else{
+    target = state.seq[state.pos];
+  }
+  if(k === target){
+    state.combo++;
+    if(state.combo > state.maxCombo){ state.maxCombo = state.combo; }
+    state.correct++;
+    sCorrect();
+    flashOk(k);
+    state.inputLog.push({ch: k, ok: true});
+    if(state.isWords){
+      state.wordPos++;
+      if(state.wordPos >= cur.word.length){
+        cheer();
+        state.pos++;
+        state.wordPos = 0;
+        if(state.pos >= state.seq.length){ finishPractice(); return; }
+      }
+    }else{
+      state.pos++;
+      if(state.pos >= state.seq.length){ finishPractice(); return; }
+    }
+    updatePracticeUI();
+  }else{
+    state.wrong++;
+    state.combo = 0;
+    sWrong();
+    markBad(k);
+    state.inputLog.push({ch: k, ok: false});
+    state.badFlash = true;
+    updatePracticeUI();
+  }
+}
+
+function finishPractice(){
+  if(state.done) return;
+  state.done = true;
+  clearInterval(state.timerId);
+  var lv = getLevel(state.levelId);
+  var elapsed = Math.max(1, (Date.now() - state.startTime) / 1000);
+  var total = state.correct + state.wrong;
+  var acc = total > 0 ? Math.round(state.correct / total * 100) : 0;
+  var wpm = Math.round(state.correct / (elapsed / 60));
+  var stars = acc >= 95 ? 3 : (acc >= 85 ? 2 : 1);
+  /* 保存最高记录（按关卡索引） */
+  var prev = state.best[state.levelId] || {};
+  var newStars = Math.max(prev.stars || 0, stars);
+  state.stars[state.levelId] = newStars;
+  if(stars > (prev.stars || 0) || acc > (prev.acc || 0)){
+    state.best[state.levelId] = { acc: acc, wpm: wpm, stars: stars };
+  }
+  state.totalStars = 0;
+  for(var id in state.stars){ state.totalStars += state.stars[id]; }
+  /* 解锁下一关（按索引顺延） */
+  var next = null;
+  if(state.levelId < LEVELS.length - 1){
+    var nid = state.levelId + 1;
+    if(state.unlocked.indexOf(nid) < 0){
+      state.unlocked.push(nid);
+      next = nid;
+    }
+  }
+  saveProgress();
+  renderResult({
+    stars: stars,
+    acc: acc,
+    wpm: wpm,
+    correct: state.correct,
+    wrong: state.wrong,
+    levelName: lv.name,
+    nextUnlocked: next
+  });
+  switchView("result");
+}
+
+/* =====================================================
+   事件绑定与启动
+===================================================== */
+function initEvents(){
+  $("goLessonBtn").addEventListener("click", function(){ ensureAudio(); sClick(); switchView("lesson"); });
+  $("lessonBack").addEventListener("click", function(){ ensureAudio(); sClick(); switchView("home"); renderHome(); });
+  $("lessonStartBtn").addEventListener("click", function(){ goLevel(0); });
+  $("practiceBack").addEventListener("click", function(){
+    clearInterval(state.timerId);
+    ensureAudio(); sClick();
+    switchView("home");
+    renderHome();
+  });
+  $("soundBtn").addEventListener("click", function(){
+    state.sound = !state.sound;
+    ensureAudio();
+    if(state.sound){ sClick(); }
+    updateSoundIcon();
+    saveProgress();
+  });
+  $("blindBtn").addEventListener("click", function(){
+    state.blind = !state.blind;
+    ensureAudio(); sClick();
+    updateBlindBtn();
+    updatePracticeUI();
+    saveProgress();
+  });
+  $("cfgDownloadBtn").addEventListener("click", function(){ ensureAudio(); sClick(); downloadDefaultConfig(); });
+
+  document.addEventListener("keydown", function(e){
+    if(e.ctrlKey || e.metaKey || e.altKey) return;
+    var k = e.key.toLowerCase();
+    if(k.length === 1 || k === " "){
+      var el = findKey(k);
+      if(el){ el.classList.add("pressed"); }
+      if(state.view === "practice" && !state.done){
+        e.preventDefault();
+        handleInput(k);
+      }
+    }
+  });
+  document.addEventListener("keyup", function(e){
+    var el = findKey(e.key.toLowerCase());
+    if(el){ el.classList.remove("pressed"); }
+  });
+}
+
+loadProgress();
+initEvents();
+renderHome();
+</script>
+</body>
+</html>
