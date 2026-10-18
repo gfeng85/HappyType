@@ -825,11 +825,11 @@ function renderStatBar(){
 /* 打字行（单字母/计时模式）：已打 + 当前 + 预告 */
 function typeLineHTML(){
   var html = '<div class="type-line">';
-  /* 已打出的字符（最近 6 个，打字机留在左边） */
-  var done = state.inputLog.slice(-6);
+  /* 已打出的字符（只显示打对的，最近 6 个，打字机留在左边；打错的只在盲打面板显示） */
+  var done = state.inputLog.filter(function(item){ return item.ok; }).slice(-6);
   done.forEach(function(item, i){
     var ch = item.ch === " " ? "·" : item.ch;
-    var cls = item.ok ? "tl-done" : "tl-done tl-bad";
+    var cls = "tl-done";
     if(done.length > 4 && i < done.length - 4){ cls += " tl-old"; }
     html += '<span class="' + cls + '">' + ch + "</span>";
   });
