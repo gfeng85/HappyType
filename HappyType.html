@@ -91,6 +91,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 0 var(--blue-deep);font-size:17px;padding:12px 26px;}
 .btn-green{background:var(--green);color:#fff;box-shadow:0 4px 0 var(--green-deep);font-size:17px;padding:12px 26px;}
 .btn-ghost{background:var(--card);color:var(--blue-deep);box-shadow:0 4px 0 rgba(201,212,222,.75);font-size:16px;padding:11px 22px;border:2px solid var(--blue);}
+/* 结果页按钮上的键位角标（按 N / R / H 可直接触发） */
+.btn-kbd{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:6px;background:rgba(255,255,255,.32);font-family:var(--font-letter);font-size:12px;font-weight:700;line-height:1;letter-spacing:.5px;}
+.btn-ghost .btn-kbd{background:rgba(77,157,224,.16);}
 
 /* ============ 训练套餐 ============ */
 .section-title{display:flex;align-items:center;gap:10px;font-family:var(--font-round);font-size:21px;margin:0 0 14px 4px;}
@@ -425,24 +428,25 @@ var DEFAULT_WORDS = ["cat","dog","sun","hat","red","big","fun","run","pig","cup"
 
 /* 内置默认关卡（顺序即关卡号：levels 数组第 1 个就是第 1 关，不需要 id 字段；
    与 config.js 的内容保持一致，程序目录没有配置文件时也按这套关卡运行）
-   color 可选：不写会自动随机配色 */
+   color 可选：不写会自动随机配色
+   ⚠️ 改这里时请同步仓库里的 config.js，两份内容应完全一致 */
 var DEFAULT_LEVELS = [
   { name:"指法小课堂", kind:"lesson", chars:"fj", count:8, desc:"先认识基本键，学会放手指", badge:"入门", color:"#4D9DE0" },
-  { name:"基本键左手", kind:"letters", chars:"asdfg", count:20, desc:"左手 ASDFG", badge:"基本键" },
-  { name:"基本键右手", kind:"letters", chars:"hjkl;", count:20, desc:"右手 HJKL；", badge:"基本键" },
-  { name:"基本键训练", kind:"letters", chars:"asdfghjkl;", count:20, desc:"左手 ASDFG · 右手 HJKL;", badge:"基本键" },
-  { name:"上排键左手", kind:"letters", chars:"qwert", count:20, desc:"QWERT 左手往上伸", badge:"上排键" },
-  { name:"上排键右手", kind:"letters", chars:"yuiop", count:20, desc:"YUIOP 右手往上伸", badge:"上排键" },
-  { name:"上排键混合", kind:"letters", chars:"qwertyuiop", count:20, desc:"上排混合练习", badge:"上排键" },
-  { name:"上中排混合练习", kind:"letters", chars:"qwertyuiopasdfghjkl;", count:20, desc:"上排混合练习", badge:"上排键" },
-  { name:"下排键左手", kind:"letters", chars:"zxcvb", count:24, desc:"ZXCVB 左手往下伸手", badge:"下排键" },
-  { name:"下排键左手", kind:"letters", chars:"nm,./", count:24, desc:"NM,./ 右手往下伸手", badge:"下排键" },
-  { name:"下排键混合", kind:"letters", chars:"zxcvbnm,./", count:24, desc:"双手往下伸手", badge:"下排键" },
-  { name:"字母大挑战", kind:"letters", chars:ALPHA, count:30, desc:"26 个字母混着来", badge:"挑战" },
-  { name:"单词练习", kind:"words", count:16, desc:"把一个个单词打出来", badge:"组合" },
-  { name:"短句练习", kind:"words", words:["i can run.","a red ball.","my cat is fat.","i like milk.","let us play.","the sun is hot.","a big bird.","look at the fish.","this is my dog."], count:8, desc:"连起来打一个小短句", badge:"组合" },
-  { name:"计时挑战", kind:"timer", chars:ALPHA, time:60, desc:"60 秒，看你能打对多少个", badge:"计时" },
-  { name:"自由练习", kind:"letters", chars:ALPHA, count:40, desc:"想打什么就打什么", badge:"自由", alwaysOpen:true }
+  { name:"基本键左手", kind:"letters", chars:"asdfg", count:20, desc:"左手 ASDFG", badge:"基本键", color:"#E85D3F" },
+  { name:"基本键右手", kind:"letters", chars:"hjkl;", count:20, desc:"右手 HJKL；", badge:"基本键", color:"#F09B2E" },
+  { name:"基本键训练", kind:"letters", chars:"asdfghjkl;", count:20, desc:"左手 ASDFG · 右手 HJKL;", badge:"基本键", color:"#7B6CF0" },
+  { name:"上排键左手", kind:"letters", chars:"qwert", count:20, desc:"QWERT 左手往上伸", badge:"上排键", color:"#E85D3F" },
+  { name:"上排键右手", kind:"letters", chars:"yuiop", count:20, desc:"YUIOP 右手往上伸", badge:"上排键", color:"#FF9F1C" },
+  { name:"上排键混合", kind:"letters", chars:"qwertyuiop", count:20, desc:"上排混合练习", badge:"上排键", color:"#E8537A" },
+  { name:"上中排混合练习", kind:"letters", chars:"qwertyuiopasdfghjkl;", count:20, desc:"上排混合练习", badge:"上排键", color:"#43AA8B" },
+  { name:"下排键左手", kind:"letters", chars:"zxcvb", count:24, desc:"ZXCVB 左手往下伸手", badge:"下排键", color:"#E8537A" },
+  { name:"下排键右手", kind:"letters", chars:"nm,./", count:24, desc:"NM,./ 右手往下伸手", badge:"下排键", color:"#F09B2E" },
+  { name:"下排键混合", kind:"letters", chars:"zxcvbnm,./", count:24, desc:"双手往下伸手", badge:"下排键", color:"#E8537A" },
+  { name:"字母大挑战", kind:"letters", chars:ALPHA, count:30, desc:"26 个字母混着来", badge:"挑战", color:"#E8537A" },
+  { name:"单词练习", kind:"words", count:16, desc:"把一个个单词打出来", badge:"组合", color:"#E85D3F" },
+  { name:"短句练习", kind:"words", words:["i can run.","a red ball.","my cat is fat.","i like milk.","let us play.","the sun is hot.","a big bird.","look at the fish.","this is my dog."], count:8, desc:"连起来打一个小短句", badge:"组合", color:"#7B6CF0" },
+  { name:"计时挑战", kind:"timer", chars:ALPHA, time:60, desc:"60 秒，看你能打对多少个", badge:"计时", color:"#7B6CF0" },
+  { name:"自由练习", kind:"letters", chars:ALPHA, count:40, desc:"想打什么就打什么", badge:"自由", alwaysOpen:true, color:"#F09B2E" }
 ];
 /* 读取外部关卡配置（同目录"config.js"），文件缺失或加载失败时自动使用上面的默认配置 */
 var CFG = (typeof window !== "undefined" && window.KID_TYPING_CONFIG) ? window.KID_TYPING_CONFIG : null;
@@ -924,11 +928,11 @@ function renderResult(res){
     '<div class="result-item"><div class="ri-num ok">' + res.correct + '</div><div class="ri-label">打对</div></div>' +
     '<div class="result-item"><div class="ri-num bad">' + res.wrong + '</div><div class="ri-label">打错</div></div>';
   var actions = "";
-  actions += '<button class="btn btn-primary" id="retryBtn">再来一次</button>';
+  actions += '<button class="btn btn-primary" id="retryBtn">再来一次<span class="btn-kbd">R</span></button>';
   if(res.nextUnlocked){
-    actions += '<button class="btn btn-blue" id="nextBtn">下一关</button>';
+    actions += '<button class="btn btn-blue" id="nextBtn">下一关<span class="btn-kbd">N</span></button>';
   }
-  actions += '<button class="btn btn-ghost" id="homeBtn">回到主页</button>';
+  actions += '<button class="btn btn-ghost" id="homeBtn">回到主页<span class="btn-kbd">H</span></button>';
   $("resultActions").innerHTML = actions;
   $("retryBtn").addEventListener("click", function(){ goLevel(state.levelId); });
   if(res.nextUnlocked){ $("nextBtn").addEventListener("click", function(){ goLevel(res.nextUnlocked); }); }
@@ -1096,6 +1100,17 @@ function finishPractice(){
   switchView("result");
 }
 
+/* 结果页快捷键：N=下一关 R=再来一次 H=回到主页
+   直接触发对应按钮，复用按钮自身的逻辑，避免两套行为分叉 */
+function resultShortcut(k){
+  var btn = null;
+  if(k === "r"){ btn = $("retryBtn"); }
+  else if(k === "n"){ btn = $("nextBtn"); }
+  else if(k === "h"){ btn = $("homeBtn"); }
+  if(btn){ btn.click(); return; }
+  if(k === "n"){ ensureAudio(); sClick(); showToast("已经是最后一关啦"); }
+}
+
 /* =====================================================
    事件绑定与启动
 ===================================================== */
@@ -1128,6 +1143,12 @@ function initEvents(){
   document.addEventListener("keydown", function(e){
     if(e.ctrlKey || e.metaKey || e.altKey) return;
     var k = e.key.toLowerCase();
+    /* 结果页：N=下一关、R=再来一次、H=回到主页 */
+    if(!e.repeat && state.view === "result" && (k === "n" || k === "r" || k === "h")){
+      e.preventDefault();
+      resultShortcut(k);
+      return;
+    }
     if(k.length === 1 || k === " "){
       var el = findKey(k);
       if(el){ el.classList.add("pressed"); }
