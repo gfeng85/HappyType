@@ -430,9 +430,9 @@ var KB_ROWS = [
 var DEFAULT_WORDS = ["cat","dog","sun","hat","red","big","fun","run","pig","cup","ball","star","tree","bird","fish","book","milk","cake","play","jump","duck","frog","lion","bear","happy","hello"];
 
 /* 内置默认关卡（顺序即关卡号：levels 数组第 1 个就是第 1 关，不需要 id 字段；
-   与 config.js 的内容保持一致，程序目录没有配置文件时也按这套关卡运行）
-   color 可选：不写会自动随机配色
-   ⚠️ 改这里时请同步仓库里的 config.js，两份内容应完全一致 */
+   程序目录没有 config.js 时就跑这一套，有 config.js 则以配置文件为准；
+   主页的「下载配置文件」按钮就是把这一套序列化成 config.js 给用户改）
+   color 可选：不写会自动随机配色 */
 var DEFAULT_LEVELS = [
   { name:"指法小课堂", kind:"lesson", chars:"fj", count:8, desc:"先认识基本键，学会放手指", badge:"入门", color:"#4D9DE0" },
   { name:"基本键左手", kind:"letters", chars:"asdfg", count:20, desc:"左手 ASDFG", badge:"基本键", color:"#E85D3F" },
